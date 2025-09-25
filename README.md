@@ -47,70 +47,81 @@ STEP-8: Repeat the above steps to generate the entire cipher text.
 ## PROGRAM
 ```
 #include <stdio.h>
-#include <string.h>
 #include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
 
-// Function to encrypt a message using Vigenere Cipher
-void encrypt(char text[], char key[], char result[]) {
-    int textLen = strlen(text);
-    int keyLen = strlen(key);
-    int i, j = 0;
-
-    for (i = 0; i < textLen; i++) {
-        if (isalpha(text[i])) {
-            char base = isupper(text[i]) ? 'A' : 'a';
-            result[i] = ( (text[i] - base) + (toupper(key[j % keyLen]) - 'A') ) % 26 + base;
-            j++;
-        } else {
-            result[i] = text[i]; // keep spaces/punctuation
-        }
-    }
-    result[i] = '\0';
-}
-
-// Function to decrypt a message using Vigenere Cipher
-void decrypt(char text[], char key[], char result[]) {
-    int textLen = strlen(text);
-    int keyLen = strlen(key);
-    int i, j = 0;
-
-    for (i = 0; i < textLen; i++) {
-        if (isalpha(text[i])) {
-            char base = isupper(text[i]) ? 'A' : 'a';
-            result[i] = ( ( (text[i] - base) - (toupper(key[j % keyLen]) - 'A') + 26 ) % 26 ) + base;
-            j++;
-        } else {
-            result[i] = text[i]; // keep spaces/punctuation
-        }
-    }
-    result[i] = '\0';
-}
+void encipher();
+void decipher();
 
 int main() {
-    char text[1000], key[100], enc[1000], dec[1000];
+    int choice;
+    while (1) {
+        printf("\n1. Encrypt Text");
+        printf("\t2. Decrypt Text");
+        printf("\t3. Exit");
+        printf("\n\nEnter Your Choice: ");
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input. Exiting...\n");
+            return 1;
+        }
+        getchar(); // consume newline
 
-    printf("Simulation of Vigenere Cipher\n");
-    printf("Enter the message: ");
-    scanf("%[^\n]", text);   // read full line including spaces
-    getchar();
-    printf("Enter the key: ");
-    scanf("%s", key);
+        if (choice == 3)
+            return 0;
+        else if (choice == 1)
+            encipher();
+        else if (choice == 2)
+            decipher();
+        else
+            printf("Please Enter a Valid Option.\n");
+    }
+}
 
-    for (int i = 0; i < strlen(key); i++) key[i] = toupper(key[i]);
+void encipher() {
+    unsigned int i, j;
+    char input[50], key[10];
 
-    encrypt(text, key, enc);
-    printf("Encrypted text : %s\n", enc);
+    printf("\n\nEnter Plain Text: ");
+    scanf("%49s", input);
 
-    decrypt(enc, key, dec);
-    printf("Decrypted text : %s\n", dec);
+    printf("\nEnter Key Value: ");
+    scanf("%9s", key);
 
-    return 0;
+    printf("\nResultant Cipher Text: ");
+    for (i = 0, j = 0; i < strlen(input); i++, j++) {
+        if (j >= strlen(key)) j = 0;
+        printf("%c", 65 + (((toupper(input[i]) - 65) + (toupper(key[j]) - 65)) % 26));
+    }
+    printf("\n");
+}
+
+void decipher() {
+    unsigned int i, j;
+    char input[50], key[10];
+    int value;
+
+    printf("\n\nEnter Cipher Text: ");
+    scanf("%49s", input);
+
+    printf("\nEnter the Key Value: ");
+    scanf("%9s", key);
+
+    printf("\nDecrypted Plain Text: ");
+    for (i = 0, j = 0; i < strlen(input); i++, j++) {
+        if (j >= strlen(key)) j = 0;
+        value = (toupper(input[i]) - 65) - (toupper(key[j]) - 65);
+        if (value < 0) value += 26;
+        printf("%c", 65 + (value % 26));
+    }
+    printf("\n");
 }
 
 ```
 
 ## OUTPUT
-<img width="817" height="289" alt="image" src="https://github.com/user-attachments/assets/acde75bd-bc50-4194-aa82-1e4cfaff86c6" />
+<img width="817" height="858" alt="image" src="https://github.com/user-attachments/assets/f58001e1-de05-48e9-8850-a29d11127c8e" />
+
 
 
 
